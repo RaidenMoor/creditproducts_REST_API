@@ -1,0 +1,9 @@
+package com.example.restbank.repository;
+
+import com.example.restbank.model.IssuedLoan;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface IssuedLoanRepository extends GenericRepository<IssuedLoan> {
+}
