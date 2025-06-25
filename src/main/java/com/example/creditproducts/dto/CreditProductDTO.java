@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreditProductDTO extends GenericDTO{
+    @Schema(description = "")
+    private String name;
     @Schema(description = "минимальная сумма")
     private BigDecimal minAmount;
 
@@ -31,6 +33,14 @@ public class CreditProductDTO extends GenericDTO{
 
     public BigDecimal getMinAmount() {
         return minAmount;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public void setMinAmount(BigDecimal minAmount) {

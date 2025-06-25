@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public abstract class GenericService <E extends GenericModel, D extends GenericDTO> {
@@ -38,12 +39,13 @@ public abstract class GenericService <E extends GenericModel, D extends GenericD
         return mapper.toDTO(repository.save(entity));
     }
 
-    public D update(D DTO) {
+    public D update(D DTO, Long id) {
         E entity = mapper.toEntity(DTO);
-        Long id = entity.getId();
+
         if (id != null) {
             E existingEntity = repository.findById(id).orElse(null);
             if (existingEntity != null) {
+                entity.setId(id);
                 return mapper.toDTO(repository.save(entity));
             }
         }

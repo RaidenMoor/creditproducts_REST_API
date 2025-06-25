@@ -3,6 +3,9 @@ package com.example.creditproducts.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,12 +28,16 @@ public class Client extends GenericModel{
     private String lastName;
 
     @Column(name="email", nullable = false)
+    @Email
     private String email;
 
     @Column(name="phone")
+    @Pattern(regexp = "^(\\+7|8)[\\s\\-]?\\(?\\d{3}\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{2}[\\s\\-]?\\d{2}$",
+            message = "Неверный формат номера телефона")
     private String phone;
 
-    @Column(name="passport_number", nullable = false)
+    @Column(name="passport_number", nullable = false, length = 6)
+    @Pattern(regexp = "^\\d{6}$", message = "Номер паспорта должен состоять из 6 цифр")
     private String passportNumber;
 
     @Column(name="registration_date", nullable = false)
