@@ -1,10 +1,12 @@
 package com.example.creditproducts.controller;
 
 import com.example.creditproducts.dto.ClientDTO;
+import com.example.creditproducts.exception.ClientNotFoundException;
 import com.example.creditproducts.model.Client;
 import com.example.creditproducts.model.CreditProduct;
 import com.example.creditproducts.repository.ClientRepository;
 import com.example.creditproducts.service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/clients")
@@ -29,37 +32,30 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createClient(@RequestBody Client client, BindingResult bindingResult){
+    public ResponseEntity<?> createClient(@Valid @RequestBody Client client, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             // Обработка ошибок валидации
-            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST); // 400 Bad Request
+            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
 
-        try {
-            Client savedClient = clientRepository.save(client);
-            return new ResponseEntity<>("Добавлен новый клиент с id: " + savedClient.getId(), HttpStatus.CREATED); // 201 Created
-        } catch (Exception e) {
-
-            return new ResponseEntity<>("Ошибка при создании клиента: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
-        }
+        Client savedClient = clientRepository.save(client);
+        return new ResponseEntity<>("Добавлен новый клиент с id: " + savedClient.getId(), HttpStatus.CREATED); // 201 Created
 
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO,
+    public ResponseEntity<?> updateClient(@PathVariable Long id,@Valid @RequestBody ClientDTO clientDTO,
                                BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            // Обработка ошибок валидации
-            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST); // 400 Bad Request
+            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
-        try {
+        Optional<Client> client = clientRepository.findById(id);
+        if (client.isEmpty()) {
+            throw new ClientNotFoundException(id);
+        }
             clientService.update(clientDTO, id);
             return new ResponseEntity<>("Обновлены данные клиента с id: " + id, HttpStatus.OK);
-        }
-        catch (Exception e) {
 
-            return new ResponseEntity<>("Ошибка при изменении данных клиента: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
-        }
 
 
     }

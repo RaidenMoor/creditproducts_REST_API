@@ -1,14 +1,20 @@
 package com.example.creditproducts.controller;
 
 import com.example.creditproducts.dto.CreditProductDTO;
+import com.example.creditproducts.exception.ClientNotFoundException;
+import com.example.creditproducts.exception.CreditProductNotFoundException;
 import com.example.creditproducts.model.CreditProduct;
 import com.example.creditproducts.repository.CreditProductRepository;
-import com.example.creditproducts.repository.UserRepository;
 import com.example.creditproducts.service.CreditProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/credit-products")
@@ -29,21 +35,41 @@ public class CreditProductController {
 
     @GetMapping(value = "/{id}")
     public CreditProductDTO getCreditProducts(@PathVariable Long id){
+
+        Optional<CreditProduct> creditProduct = creditProductRepository.findById(id);
+        if (creditProduct.isEmpty()) {
+            throw new CreditProductNotFoundException(id);
+        }
         return creditProductService.getById(id);
 
     }
 
     @PostMapping
-    public String createCreditProduct(@RequestBody CreditProduct creditProduct){
-        creditProductRepository.save(creditProduct);
-        return "Добавлен новый кредитный продукт";
+    public ResponseEntity<?> createCreditProduct(@Valid @RequestBody CreditProduct creditProduct,
+                                      BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+
+        CreditProduct savedProduct = creditProductRepository.save(creditProduct);
+        return new ResponseEntity<>("Добавлен новый кредитный продукт с id: " + savedProduct.getId(),
+                HttpStatus.CREATED);
 
     }
 
     @PutMapping(value = "/{id}")
-    public String updateCreditProduct(@PathVariable Long id, @RequestBody CreditProductDTO creditProductDTO){
+    public ResponseEntity<?> updateCreditProduct(@PathVariable Long id,
+                                                 @Valid @RequestBody CreditProductDTO creditProductDTO,
+                                                 BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+
+        Optional<CreditProduct> creditProduct = creditProductRepository.findById(id);
+        if (creditProduct.isEmpty()) {
+            throw new CreditProductNotFoundException(id);
+        }
+
         creditProductService.update(creditProductDTO,id);
-        return "Условия обновлены";
+        return new ResponseEntity<>("Условия обновлены", HttpStatus.CREATED);
     }
 
     @Autowired
