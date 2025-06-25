@@ -1,12 +1,12 @@
-package com.example.restbank.mapper;
+package com.example.creditproducts.mapper;
 
 
-import com.example.restbank.dto.ClientDTO;
-import com.example.restbank.model.Client;
-import com.example.restbank.model.CreditApplication;
-import com.example.restbank.model.User;
-import com.example.restbank.repository.ClientRepository;
-import com.example.restbank.repository.UserRepository;
+
+import com.example.creditproducts.dto.ClientDTO;
+import com.example.creditproducts.model.Client;
+import com.example.creditproducts.model.User;
+import com.example.creditproducts.repository.ClientRepository;
+import com.example.creditproducts.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
@@ -26,16 +26,11 @@ public class ClientMapper extends GenericMapper<Client, ClientDTO>
     public void setupMapper() {
 
         modelMapper.createTypeMap(Client.class, ClientDTO.class)
-                .addMappings(m -> {
-                    m.skip(ClientDTO::setUserId);
-                })
+                .addMappings(m -> m.skip(ClientDTO::setUserId))
                 .setPostConverter(toDtoConverter());
 
         modelMapper.createTypeMap(ClientDTO.class, Client.class)
-                .addMappings(m -> {
-                    m.skip(Client::setUser);
-
-                })
+                .addMappings(m -> m.skip(Client::setUser))
                 .setPostConverter(toEntityConverter());
 
     }

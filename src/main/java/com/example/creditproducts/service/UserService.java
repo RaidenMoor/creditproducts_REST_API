@@ -1,17 +1,11 @@
-package com.example.restbank.service;
+package com.example.creditproducts.service;
 
-import com.example.restbank.dto.UserDTO;
-import com.example.restbank.mapper.UserMapper;
-import com.example.restbank.model.Role;
-import com.example.restbank.model.User;
-import com.example.restbank.repository.UserRepository;
+import com.example.creditproducts.dto.UserDTO;
+import com.example.creditproducts.mapper.UserMapper;
+import com.example.creditproducts.model.User;
+import com.example.creditproducts.repository.UserRepository;
 
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
-
-import static com.example.restbank.constant.RoleConstants.USER;
 
 @Service
 public class UserService extends GenericService<User, UserDTO> {

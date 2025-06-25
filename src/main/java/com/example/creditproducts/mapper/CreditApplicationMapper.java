@@ -1,14 +1,13 @@
-package com.example.restbank.mapper;
+package com.example.creditproducts.mapper;
 
-import com.example.restbank.dto.CreditApplicationDTO;
-import com.example.restbank.model.Client;
-import com.example.restbank.model.CreditApplication;
-import com.example.restbank.model.CreditProduct;
 
-import com.example.restbank.repository.ClientRepository;
-import com.example.restbank.repository.CreditApplicationRepository;
-import com.example.restbank.repository.CreditProductRepository;
-
+import com.example.creditproducts.dto.CreditApplicationDTO;
+import com.example.creditproducts.model.Client;
+import com.example.creditproducts.model.CreditApplication;
+import com.example.creditproducts.model.CreditProduct;
+import com.example.creditproducts.repository.ClientRepository;
+import com.example.creditproducts.repository.CreditApplicationRepository;
+import com.example.creditproducts.repository.CreditProductRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

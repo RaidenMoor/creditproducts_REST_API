@@ -1,4 +1,4 @@
-package com.example.restbank.model;
+package com.example.creditproducts.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "credit_applications")
 @NoArgsConstructor
-@Getter
-@Setter
 @ToString(callSuper = true)
 @SequenceGenerator(name = "default_gen", sequenceName = "applications_seq", allocationSize = 1, initialValue = 12)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonId")
@@ -53,4 +51,68 @@ public class CreditApplication extends GenericModel{
 
     @OneToOne(mappedBy = "creditApplication", cascade = CascadeType.ALL)
     private IssuedLoan issuedLoan;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public CreditProduct getCreditProduct() {
+        return creditProduct;
+    }
+
+    public void setCreditProduct(CreditProduct creditProduct) {
+        this.creditProduct = creditProduct;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public int getTermMonths() {
+        return termMonths;
+    }
+
+    public void setTermMonths(int termMonths) {
+        this.termMonths = termMonths;
+    }
+
+    public ApplicationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ApplicationStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getApplicationDate() {
+        return applicationDate;
+    }
+
+    public void setApplicationDate(LocalDate applicationDate) {
+        this.applicationDate = applicationDate;
+    }
+
+    public LocalDate getDecisionDate() {
+        return decisionDate;
+    }
+
+    public void setDecisionDate(LocalDate decisionDate) {
+        this.decisionDate = decisionDate;
+    }
+
+    public IssuedLoan getIssuedLoan() {
+        return issuedLoan;
+    }
+
+    public void setIssuedLoan(IssuedLoan issuedLoan) {
+        this.issuedLoan = issuedLoan;
+    }
 }

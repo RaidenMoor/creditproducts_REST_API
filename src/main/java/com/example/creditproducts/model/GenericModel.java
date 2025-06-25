@@ -1,4 +1,4 @@
-package com.example.restbank.model;
+package com.example.creditproducts.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,12 +8,15 @@ import lombok.ToString;
 
 @MappedSuperclass
 @NoArgsConstructor
-@Getter
-@Setter
 @ToString
 public abstract class GenericModel {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "default_gen")
     protected Long id;
+
+    public Long getId(){
+        return id;
+    }
+
 }

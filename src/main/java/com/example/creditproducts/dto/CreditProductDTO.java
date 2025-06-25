@@ -1,4 +1,4 @@
-package com.example.restbank.dto;
+package com.example.creditproducts.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreditProductDTO extends GenericDTO{
@@ -32,4 +29,53 @@ public class CreditProductDTO extends GenericDTO{
     @Schema(description = "активен ли продукт для выдачи")
     private boolean isActive;
 
+    public BigDecimal getMinAmount() {
+        return minAmount;
+    }
+
+    public void setMinAmount(BigDecimal minAmount) {
+        this.minAmount = minAmount;
+    }
+
+    public BigDecimal getMaxAmount() {
+        return maxAmount;
+    }
+
+    public void setMaxAmount(BigDecimal maxAmount) {
+        this.maxAmount = maxAmount;
+    }
+
+    public BigDecimal getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public int getTermMin() {
+        return termMin;
+    }
+
+    public void setTermMin(int termMin) {
+        this.termMin = termMin;
+    }
+
+    public int getTermMax() {
+        return termMax;
+    }
+
+    public void setTermMax(int termMax) {
+        this.termMax = termMax;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
 }
+

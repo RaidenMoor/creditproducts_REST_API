@@ -1,4 +1,4 @@
-package com.example.restbank.model;
+package com.example.creditproducts.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -11,8 +11,6 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@Getter
-@Setter
 @ToString(callSuper = true)
 @SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1, initialValue = 12)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonId")
@@ -35,6 +33,29 @@ public class User extends GenericModel{
         this.password = password;
         this.role = role;
     }
+
+    public String getUsername(){
+        return username;
+    }
+    public String getPassword(){
+        return password;
+    }
+
+    public void setUsername(String username){
+        this.username = username;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+    public Role getRole(){
+        return role;
+    }
+
+    public void setRole(Role role){
+        this.role = role;
+    }
+
 
 
 }

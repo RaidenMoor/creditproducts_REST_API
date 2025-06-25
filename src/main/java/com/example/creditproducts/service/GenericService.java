@@ -1,9 +1,9 @@
-package com.example.restbank.service;
+package com.example.creditproducts.service;
 
-import com.example.restbank.dto.GenericDTO;
-import com.example.restbank.mapper.Mapper;
-import com.example.restbank.model.GenericModel;
-import com.example.restbank.repository.GenericRepository;
+import com.example.creditproducts.dto.GenericDTO;
+import com.example.creditproducts.mapper.Mapper;
+import com.example.creditproducts.model.GenericModel;
+import com.example.creditproducts.repository.GenericRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

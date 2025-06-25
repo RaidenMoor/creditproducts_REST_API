@@ -1,11 +1,10 @@
-package com.example.restbank.mapper;
+package com.example.creditproducts.mapper;
 
-import com.example.restbank.dto.GenericDTO;
-import com.example.restbank.model.GenericModel;
-import lombok.RequiredArgsConstructor;
+
+import com.example.creditproducts.dto.GenericDTO;
+import com.example.creditproducts.model.GenericModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

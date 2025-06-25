@@ -1,11 +1,11 @@
-package com.example.restbank.service;
+package com.example.creditproducts.service;
 
-import com.example.restbank.dto.ClientDTO;
-import com.example.restbank.mapper.ClientMapper;
-import com.example.restbank.mapper.CreditProductMapper;
-import com.example.restbank.model.Client;
-import com.example.restbank.repository.ClientRepository;
-import com.example.restbank.repository.CreditProductRepository;
+import com.example.creditproducts.dto.ClientDTO;
+import com.example.creditproducts.mapper.ClientMapper;
+import com.example.creditproducts.mapper.CreditProductMapper;
+import com.example.creditproducts.model.Client;
+import com.example.creditproducts.repository.ClientRepository;
+import com.example.creditproducts.repository.CreditProductRepository;
 import org.springframework.stereotype.Service;
 
 @Service

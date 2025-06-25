@@ -1,4 +1,4 @@
-package com.example.restbank.constant;
+package com.example.creditproducts.constant;
 
 public interface  RoleConstants {
     String OPERATOR = "OPERATOR";

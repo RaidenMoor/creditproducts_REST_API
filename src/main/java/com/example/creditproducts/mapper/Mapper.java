@@ -1,7 +1,9 @@
-package com.example.restbank.mapper;
+package com.example.creditproducts.mapper;
 
-import com.example.restbank.dto.GenericDTO;
-import com.example.restbank.model.GenericModel;
+
+
+import com.example.creditproducts.dto.GenericDTO;
+import com.example.creditproducts.model.GenericModel;
 
 import java.util.List;
 

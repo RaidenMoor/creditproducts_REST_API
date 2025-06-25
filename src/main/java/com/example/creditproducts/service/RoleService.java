@@ -1,7 +1,7 @@
-package com.example.restbank.service;
+package com.example.creditproducts.service;
 
-import com.example.restbank.model.Role;
-import com.example.restbank.repository.RoleRepository;
+import com.example.creditproducts.model.Role;
+import com.example.creditproducts.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

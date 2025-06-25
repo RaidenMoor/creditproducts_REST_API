@@ -1,6 +1,5 @@
-package com.example.restbank.dto;
+package com.example.creditproducts.dto;
 
-import com.example.restbank.model.CreditApplication;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +9,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class IssuedLoanDTO extends GenericDTO{
@@ -30,4 +28,43 @@ public class IssuedLoanDTO extends GenericDTO{
 
     @Schema(description = "кредитная заявка")
     private Long creditApplicationId;
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public BigDecimal getMonthlyAmount() {
+        return monthlyAmount;
+    }
+
+    public void setMonthlyAmount(BigDecimal monthlyAmount) {
+        this.monthlyAmount = monthlyAmount;
+    }
+
+    public BigDecimal getRemainingAmount() {
+        return remainingAmount;
+    }
+
+    public void setRemainingAmount(BigDecimal remainingAmount) {
+        this.remainingAmount = remainingAmount;
+    }
+
+    public Long getCreditApplicationId() {
+        return creditApplicationId;
+    }
+
+    public void setCreditApplicationId(Long creditApplicationId) {
+        this.creditApplicationId = creditApplicationId;
+    }
 }

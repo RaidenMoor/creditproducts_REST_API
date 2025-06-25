@@ -1,4 +1,4 @@
-package com.example.restbank.model;
+package com.example.creditproducts.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -14,8 +14,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "issued_loans")
 @NoArgsConstructor
-@Getter
-@Setter
 @ToString(callSuper = true)
 @SequenceGenerator(name = "default_gen", sequenceName = "loans_seq", allocationSize = 1, initialValue = 12)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonId")
@@ -38,5 +36,44 @@ public class IssuedLoan extends GenericModel{
             foreignKeyDefinition = "FOREIGN KEY (application_id) REFERENCES credit_applications(id) ON DELETE RESTRICT"
     ))
     private CreditApplication creditApplication;
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public BigDecimal getMonthlyPayment() {
+        return monthlyPayment;
+    }
+
+    public void setMonthlyPayment(BigDecimal monthlyPayment) {
+        this.monthlyPayment = monthlyPayment;
+    }
+
+    public BigDecimal getRemainingAmount() {
+        return remainingAmount;
+    }
+
+    public void setRemainingAmount(BigDecimal remainingAmount) {
+        this.remainingAmount = remainingAmount;
+    }
+
+    public CreditApplication getCreditApplication() {
+        return creditApplication;
+    }
+
+    public void setCreditApplication(CreditApplication creditApplication) {
+        this.creditApplication = creditApplication;
+    }
 
 }

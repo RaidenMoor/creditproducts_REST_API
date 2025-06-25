@@ -1,6 +1,6 @@
-package com.example.restbank.repository;
+package com.example.creditproducts.repository;
 
-import com.example.restbank.model.IssuedLoan;
+import com.example.creditproducts.model.IssuedLoan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,8 @@
-package com.example.restbank.mapper;
+package com.example.creditproducts.mapper;
 
-import com.example.restbank.dto.CreditProductDTO;
-import com.example.restbank.model.CreditProduct;
+
+import com.example.creditproducts.dto.CreditProductDTO;
+import com.example.creditproducts.model.CreditProduct;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,6 +1,6 @@
-package com.example.restbank.repository;
+package com.example.creditproducts.repository;
 
-import com.example.restbank.model.Role;
+import com.example.creditproducts.model.Role;
 import org.springframework.stereotype.Repository;
 
 @Repository
