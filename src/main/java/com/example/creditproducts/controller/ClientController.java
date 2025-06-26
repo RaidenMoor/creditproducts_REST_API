@@ -2,6 +2,7 @@ package com.example.creditproducts.controller;
 
 import com.example.creditproducts.dto.ClientDTO;
 import com.example.creditproducts.exception.ClientNotFoundException;
+import com.example.creditproducts.exception.DublicateException;
 import com.example.creditproducts.model.Client;
 import com.example.creditproducts.model.CreditProduct;
 import com.example.creditproducts.repository.ClientRepository;
@@ -37,6 +38,11 @@ public class ClientController {
             // Обработка ошибок валидации
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
+
+        if(clientRepository.existsByEmail(client.getEmail())){
+            throw new DublicateException("Пользователь с таким email уже существует");
+        }
+
 
         Client savedClient = clientRepository.save(client);
         return new ResponseEntity<>("Добавлен новый клиент с id: " + savedClient.getId(), HttpStatus.CREATED); // 201 Created

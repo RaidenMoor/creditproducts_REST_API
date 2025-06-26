@@ -3,6 +3,7 @@ package com.example.creditproducts.controller;
 import com.example.creditproducts.dto.CreditProductDTO;
 import com.example.creditproducts.exception.ClientNotFoundException;
 import com.example.creditproducts.exception.CreditProductNotFoundException;
+import com.example.creditproducts.exception.DublicateException;
 import com.example.creditproducts.model.CreditProduct;
 import com.example.creditproducts.repository.CreditProductRepository;
 import com.example.creditproducts.service.CreditProductService;
@@ -49,6 +50,9 @@ public class CreditProductController {
                                       BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+
+        if(creditProductRepository.existsByName(creditProduct.getName()))
+            throw new DublicateException("Кредитный продукт с таким названием уже существует.");
 
         CreditProduct savedProduct = creditProductRepository.save(creditProduct);
         return new ResponseEntity<>("Добавлен новый кредитный продукт с id: " + savedProduct.getId(),

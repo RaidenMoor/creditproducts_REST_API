@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientRepository extends GenericRepository<Client>{
+    boolean existsByEmail(String email);
 }
