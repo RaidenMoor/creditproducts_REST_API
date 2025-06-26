@@ -9,7 +9,7 @@
 
         <RollingFile name="RollingFile"
                      fileName="./logs/creditproduct.log"
-                     filePattern="./logs/$${date:yyyy-MM-dd}/ticketoffice_%d{dd_MMMM_yyyy}_%i.log.gz">
+                     filePattern="./logs/$${date:yyyy-MM-dd}/creditproducts%d{dd_MMMM_yyyy}_%i.log.gz">
             <PatternLayout>
                 <pattern>%d %p %C{1.} [%t] %m%n</pattern>
             </PatternLayout>
@@ -30,7 +30,7 @@
         </Root>
 
         <!-- LOG "com.*" at TRACE level -->
-        <Logger name="com/example/cinema" level="error, info"></Logger>
+        <Logger name="com/example/creditproducts" level="error, info"></Logger>
     </Loggers>
 
 </Configuration>
