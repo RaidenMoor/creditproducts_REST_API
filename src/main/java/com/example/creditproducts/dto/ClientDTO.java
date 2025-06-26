@@ -1,10 +1,15 @@
 package com.example.creditproducts.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 
 @NoArgsConstructor
@@ -17,16 +22,21 @@ public class ClientDTO extends GenericDTO{
     private String lastName;
 
     @Schema(description = "электронная почта")
+    @Email
     private String email;
 
     @Schema(description = "телефон")
+    @Pattern(regexp = "^(\\+7|8)[\\s\\-]?\\(?\\d{3}\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{2}[\\s\\-]?\\d{2}$",
+            message = "Неверный формат номера телефона")
     private String phone;
 
     @Schema(description = "номер паспорта")
+    @Size(min = 6, max = 6)
+    @Pattern(regexp = "^\\d{6}$", message = "Номер паспорта должен состоять из 6 цифр")
     private String passportNumber;
 
     @Schema(description = "дата регистрации")
-    private String regictrationDate;
+    private LocalDate registrationDate;
 
     @Schema(description = "идентификатор пользователя")
     private Long userId;
@@ -71,12 +81,12 @@ public class ClientDTO extends GenericDTO{
         this.passportNumber = passportNumber;
     }
 
-    public String getRegictrationDate() {
-        return regictrationDate;
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegictrationDate(String regictrationDate) {
-        this.regictrationDate = regictrationDate;
+    public void setRegistrationDate(LocalDate regictrationDate) {
+        this.registrationDate = regictrationDate;
     }
 
     public Long getUserId() {

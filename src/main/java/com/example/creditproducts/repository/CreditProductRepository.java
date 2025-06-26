@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CreditProductRepository extends GenericRepository<CreditProduct> {
+    boolean existsByName(String name);
 }

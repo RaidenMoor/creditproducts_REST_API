@@ -21,7 +21,7 @@ public class IssuedLoanDTO extends GenericDTO{
     private LocalDate endDate;
 
     @Schema(description = "выплата в месяц")
-    private BigDecimal monthlyAmount;
+    private BigDecimal monthlyPayment;
 
     @Schema(description = "остаточная сумма")
     private BigDecimal remainingAmount;
@@ -44,12 +44,13 @@ public class IssuedLoanDTO extends GenericDTO{
         this.endDate = endDate;
     }
 
-    public BigDecimal getMonthlyAmount() {
-        return monthlyAmount;
+    public BigDecimal getMonthlyPayment() {
+        return monthlyPayment;
     }
 
-    public void setMonthlyAmount(BigDecimal monthlyAmount) {
-        this.monthlyAmount = monthlyAmount;
+    public void setMonthlyPayment(BigDecimal monthlyAmount) {
+
+        this.monthlyPayment = monthlyAmount;
     }
 
     public BigDecimal getRemainingAmount() {
