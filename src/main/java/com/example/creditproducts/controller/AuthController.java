@@ -7,6 +7,7 @@ import com.example.creditproducts.dto.security.RegisterRequest;
 import com.example.creditproducts.jwt.JwtUtils;
 import com.example.creditproducts.repository.RoleRepository;
 import com.example.creditproducts.repository.UserRepository;
+import com.example.creditproducts.security.CustomUserDetails;
 import com.example.creditproducts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,9 @@ public class AuthController {
         // 2. Сохраняем аутентификацию в контексте
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 3. Генерируем токен
-        String jwt = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
+        String jwt = jwtUtils.generateToken((CustomUserDetails) authentication.getPrincipal());
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         // Возвращаем токен
         return ResponseEntity.ok(new JwtResponse(jwt));
     }

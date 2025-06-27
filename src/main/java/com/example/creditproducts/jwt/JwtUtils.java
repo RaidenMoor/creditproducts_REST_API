@@ -1,5 +1,6 @@
 package com.example.creditproducts.jwt;
 
+import com.example.creditproducts.security.CustomUserDetails;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,10 +8,13 @@ import org.springframework.stereotype.Component;
 
 import java.security.SignatureException;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
 
+    private static final String ROLE_CLAIM = "roles";
     @Value("${jwt.secret}")
     private String secret; // Секретный ключ из application.properties
 
@@ -18,13 +22,18 @@ public class JwtUtils {
     private long expiration; // Время жизни токена
 
     // Генерация JWT токена
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(CustomUserDetails userDetails) {
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(authority -> authority.getAuthority()) // Получаем имена ролей
+                .collect(Collectors.toList());
+
         return Jwts.builder()
-                .setSubject(userDetails.getUsername()) // Устанавливаем имя пользователя
-                .setIssuedAt(new Date()) // Время создания
-                .setExpiration(new Date(System.currentTimeMillis() + expiration)) // Время истечения
-                .signWith(SignatureAlgorithm.HS512, secret) // Алгоритм подписи
-                .compact();// Собираем токен
+                .setSubject(userDetails.getUsername())
+                .claim(ROLE_CLAIM, roles) // Добавляем роли в claim
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
     }
 
     // Валидация токена
