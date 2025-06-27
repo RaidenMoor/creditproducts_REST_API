@@ -59,6 +59,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AccessException.class)
+    public ResponseEntity<ErrorResponse> handleAccessException(AccessException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN, ex.getMessage(), request);
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(InvalidTermMonthsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidTermMonthsException(InvalidTermMonthsException ex, HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);

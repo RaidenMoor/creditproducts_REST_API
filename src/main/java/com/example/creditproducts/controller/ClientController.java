@@ -1,6 +1,7 @@
 package com.example.creditproducts.controller;
 
 import com.example.creditproducts.dto.ClientDTO;
+import com.example.creditproducts.exception.AccessException;
 import com.example.creditproducts.exception.ApplicationNotFoundException;
 import com.example.creditproducts.exception.ClientNotFoundException;
 import com.example.creditproducts.exception.DublicateException;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -40,15 +43,33 @@ public class ClientController {
     }
 
     @GetMapping
-    public List<Client> getAllClients(){
-        return clientRepository.findAll();
+    public List<ClientDTO> getAllClients(){
+        return clientService.getAll();
     }
 
     @GetMapping("/{id}")
     public ClientDTO getClient(@PathVariable Long id){
-        Optional<Client> client = clientRepository.findById(id);
-        if (client.isEmpty()) {
-            throw new ApplicationNotFoundException(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Client> clientOptional = clientRepository.findById(id);
+        if (clientOptional.isEmpty()) {
+            throw new ClientNotFoundException(id);
+        }
+
+        Client client = clientOptional.get();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            boolean isUser = authorities.stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+
+            if (isUser) {
+
+                String currentUsername = authentication.getName();
+                if (client.getUser() == null || !Objects.equals(client.getUser().getUsername(), currentUsername)) { // Проверяем владельца
+                    throw new AccessException();
+                }
+            }
         }
         return clientService.getById(id);
 
@@ -76,10 +97,10 @@ public class ClientController {
                 Object principal = authentication.getPrincipal();
 
                 if (principal instanceof String) {
-                    String username = (String) principal; // Теперь можно использовать
-                    User user = userRepository.findByUsername(username).orElse(null); // Используем orElse(null) для безопасной обработки
+                    String username = (String) principal;
+                    User user = userRepository.findByUsername(username).orElse(null);
                     if (user != null) {
-                        client.setUser(user); //  Устанавливаем пользователя
+                        client.setUser(user);
                     }
                 }
 
@@ -99,9 +120,27 @@ public class ClientController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
-        Optional<Client> client = clientRepository.findById(id);
-        if (client.isEmpty()) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Client> clientOptional = clientRepository.findById(id);
+        if (clientOptional.isEmpty()) {
             throw new ClientNotFoundException(id);
+        }
+
+        Client client = clientOptional.get();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            boolean isUser = authorities.stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+
+            if (isUser) {
+
+                String currentUsername = authentication.getName();
+                if (client.getUser() == null || !Objects.equals(client.getUser().getUsername(), currentUsername)) { // Проверяем владельца
+                    throw new AccessException();
+                }
+            }
         }
             clientService.update(clientDTO, id);
             return new ResponseEntity<>("Обновлены данные клиента с id: " + id, HttpStatus.OK);

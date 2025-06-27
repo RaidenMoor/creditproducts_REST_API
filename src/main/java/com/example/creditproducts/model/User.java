@@ -24,7 +24,7 @@ public class User extends GenericModel{
     @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_users_roles"), nullable = false)
     private Role role;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private Client client;
 
     public User(String username, String password, Role role) {
