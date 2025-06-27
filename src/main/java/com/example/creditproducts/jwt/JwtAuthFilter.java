@@ -1,5 +1,6 @@
 package com.example.creditproducts.jwt;
 
+import com.example.creditproducts.security.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

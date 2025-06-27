@@ -25,11 +25,11 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-//    private  JwtAuthFilter jwtAuthFilter;
-//
-//    public WebSecurityConfig(JwtAuthFilter jwtAuthFilter) {
-//        this.jwtAuthFilter = jwtAuthFilter;
-//    }
+    private  JwtAuthFilter jwtAuthFilter;
+
+    public WebSecurityConfig(JwtAuthFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
 
     @Bean
@@ -62,26 +62,25 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/credit-products/{id}").hasRole("ADMIN") // Обновление продукта
                                 .requestMatchers(HttpMethod.PUT, "/applications/{id}/status").hasAnyRole("OPERATOR", "ADMIN")
                 )
-//                .sessionManagement(session -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)// Не используем сессии
-//                )
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-             ;
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)// Не используем сессии
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(12);// Сила шифрования
-//    }
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(
-//            AuthenticationConfiguration config) throws Exception {
-//        return config.getAuthenticationManager();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);// Сила шифрования
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
 
 

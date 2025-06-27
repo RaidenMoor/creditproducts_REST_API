@@ -10,7 +10,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
 @ToString(callSuper = true)
 @SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1, initialValue = 12)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonId")
@@ -32,6 +31,10 @@ public class User extends GenericModel{
         this.username = username;
         this.password = password;
         this.role = role;
+    }
+
+    public User(){
+
     }
 
     public String getUsername(){
