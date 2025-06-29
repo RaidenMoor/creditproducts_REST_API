@@ -46,11 +46,44 @@ public class CreditApplicationService extends GenericService<CreditApplication, 
         else return null;
     }
 
+    public CreditApplicationDTO updateStatus(Long id, String newStatus, IssuedLoanService issuedLoanServiceOver){
+        CreditApplication existingEntity = repository.findById(id).orElse(null);
+        if (existingEntity != null) {
+            existingEntity.setStatus(ApplicationStatus.valueOf(newStatus));
+            if (newStatus.equals("APPROVED")){
+                IssuedLoanDTO newIssuedLoan = issuedLoanServiceOver.createLoan(mapper.toDTO(existingEntity));
+
+            }
+            return mapper.toDTO(repository.save(existingEntity));
+        }
+        else return null;
+    }
+
     @Override
     public CreditApplicationDTO create(CreditApplicationDTO creditApplicationDTO){
         if (creditApplicationDTO == null) return null;
         CreditApplication entity = mapper.toEntity(creditApplicationDTO);
         CreditProductDTO creditProductDTO = creditProductService.getById(creditApplicationDTO.getCreditProductId());
+        if(creditApplicationDTO.getAmount().compareTo(creditProductDTO.getMaxAmount()) >= 0 ||
+                creditApplicationDTO.getAmount().compareTo(creditProductDTO.getMinAmount()) <= 0){
+            throw new InvalidAmountException(creditProductDTO.getMinAmount(),creditProductDTO.getMaxAmount());
+        }
+        if(creditApplicationDTO.getTermMonths() <= creditProductDTO.getTermMin() ||
+                creditApplicationDTO.getTermMonths() >= creditProductDTO.getTermMax()){
+            throw new InvalidTermMonthsException(creditProductDTO.getTermMin(), creditProductDTO.getTermMax());
+
+        }
+        Long entityId = entity.getId();
+        if (entityId != null && repository.existsById(entityId)) {
+            return null;
+        }
+        return mapper.toDTO(repository.save(entity));
+    }
+
+
+    public CreditApplicationDTO create(CreditApplicationDTO creditApplicationDTO, CreditProductDTO creditProductDTO){
+        if (creditApplicationDTO == null) return null;
+        CreditApplication entity = mapper.toEntity(creditApplicationDTO);
         if(creditApplicationDTO.getAmount().compareTo(creditProductDTO.getMaxAmount()) >= 0 ||
                 creditApplicationDTO.getAmount().compareTo(creditProductDTO.getMinAmount()) <= 0){
             throw new InvalidAmountException(creditProductDTO.getMinAmount(),creditProductDTO.getMaxAmount());

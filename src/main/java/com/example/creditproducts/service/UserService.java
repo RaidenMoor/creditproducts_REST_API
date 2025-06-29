@@ -13,17 +13,29 @@ import static com.example.creditproducts.constant.RoleConstants.USER;
 
 @Service
 public class UserService extends GenericService<User, UserDTO> {
-    public UserService(UserRepository userRepository, UserMapper userMapper){
-       repository= userRepository;
-        mapper = userMapper;
-    }
+
+    private RoleService roleService;
 
     @Autowired
-    private RoleService roleService;
+    public UserService(UserRepository userRepository, UserMapper userMapper,
+                       RoleService roleService){
+       repository= userRepository;
+        mapper = userMapper;
+
+        this.roleService = roleService;
+    }
+
+
+
 
 
     public UserDTO getByUsername(String login) {
-        return mapper.toDTO(((UserRepository) repository).getByUsername(login));
+        User user = ((UserRepository) repository).getByUsername(login);
+        if (user == null) {
+            return null; // Важно!  Вернуть null, если пользователь не найден
+        }
+
+        return mapper.toDTO(user);
     }
 
     @Override
