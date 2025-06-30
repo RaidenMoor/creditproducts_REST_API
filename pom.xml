@@ -27,6 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
+		<liquibase.version>4.24.0</liquibase.version>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -171,6 +172,13 @@
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- liquibase-->
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -195,6 +203,8 @@
 					<argLine>-Dfile.encoding=UTF-8</argLine>
 				</configuration>
 			</plugin>
+
+
 
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

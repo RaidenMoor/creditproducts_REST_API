@@ -60,7 +60,7 @@ public class AuthController {
     })
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        if(!userRepository.existsByUsername(request.getUsername()))
+        if(!userRepository.existsByUsername(request.getUsername())&& !request.getUsername().equals("admin"))
             throw new UsernameNotFoundException(request.getUsername());
 
         // 1. Создаём объект аутентификации
