@@ -53,7 +53,7 @@ public class WebSecurityConfig {
 
                                 // Разрешаем доступ к GET запросам для получения информации о кредитных продуктах (для всех)
                                 .requestMatchers(HttpMethod.GET, "/", "/credit-products", "/credit-products/{id}",
-                                        "/swagger-ui/index.html").permitAll()
+                                        "/swagger-ui/index.html", "/v3/api-docs").permitAll()
                                 // Защищаем GET запрос получения данных клиента (доступно аутентифицированным пользователям)
                                 .requestMatchers(HttpMethod.GET, "/clients/{id}").hasAnyRole(USER, adminRole)
                                 // Защищаем GET запрос получения данных клиента (доступно аутентифицированным пользователям)

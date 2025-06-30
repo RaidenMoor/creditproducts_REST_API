@@ -12,6 +12,9 @@ import com.example.creditproducts.model.CreditProduct;
 import com.example.creditproducts.repository.ClientRepository;
 import com.example.creditproducts.repository.CreditApplicationRepository;
 import com.example.creditproducts.service.CreditApplicationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,12 +46,23 @@ public class CreditApplicationController {
     }
 
     @GetMapping
+    @Operation(summary = "Просмотр заявок")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список заявок предоставлен"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа")
+    })
     public List<CreditApplicationDTO> getCreditApplications(){
         return creditApplicationService.getAll();
 
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Просмотреть кредитную заявку")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Заявка найдена"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "404", description = "Заявка не найдена")
+    })
     public String getCreditApplication(@PathVariable Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -81,6 +95,13 @@ public class CreditApplicationController {
     }
 
     @PutMapping("/{id}/status")
+    @Operation(summary = "Обновить статус заявки")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Статус обновлен"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "400", description = "Введен несуществующий статус"),
+            @ApiResponse(responseCode = "404", description = "Заявка не найдена")
+    })
     public ResponseEntity<?> updateStatus(@PathVariable Long id,@Valid @RequestBody String status,
                                              BindingResult bindingResult){
         if (bindingResult.hasErrors())
@@ -100,6 +121,11 @@ public class CreditApplicationController {
 
 
     @PostMapping
+    @Operation(summary = "Добавить заявку")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Заявка создана"),
+            @ApiResponse(responseCode = "400", description = "Некорректно введены данные")
+    })
     public ResponseEntity<?> createApplication(@Valid @RequestBody CreditApplicationDTO creditApplicationDTO,
                                     BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -113,6 +139,12 @@ public class CreditApplicationController {
     }
 
     @GetMapping(value = "/client/{id}")
+    @Operation(summary = "Просмотр заявок клиента")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Заявки клиента найдены"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "404", description = "Клиент не найден")
+    })
     public List<CreditApplicationDTO> findByClient(@PathVariable Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<Client> clientOptional = clientRepository.findById(id);

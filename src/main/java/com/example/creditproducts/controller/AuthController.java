@@ -9,6 +9,9 @@ import com.example.creditproducts.repository.RoleRepository;
 import com.example.creditproducts.repository.UserRepository;
 import com.example.creditproducts.security.CustomUserDetails;
 import com.example.creditproducts.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,12 +52,23 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Аутентификация")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Аутентификация прошла успешно"),
+            @ApiResponse(responseCode = "401", description = "Неверные учетные данные пользователя"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден")
+    })
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+
+        if(!userRepository.existsByUsername(request.getUsername()))
+            throw new UsernameNotFoundException(request.getUsername());
+
         // 1. Создаём объект аутентификации
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()));
+
         // 2. Сохраняем аутентификацию в контексте
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 3. Генерируем токен
@@ -65,6 +80,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Регистрация")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Рестрация прошла успешно"),
+    })
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         // Проверка на существование пользователя
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -76,7 +95,7 @@ public class AuthController {
 
         userService.create(userDTO);
 
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok("Пользователь успешно зарегистрирован!");
     }
 
     @Autowired

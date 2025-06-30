@@ -13,6 +13,9 @@ import com.example.creditproducts.repository.ClientRepository;
 import com.example.creditproducts.repository.UserRepository;
 import com.example.creditproducts.security.CustomUserDetails;
 import com.example.creditproducts.service.ClientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,11 +46,22 @@ public class ClientController {
     }
 
     @GetMapping
+    @Operation(summary = "Просмотр клиентов")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список клиентов предоставлен"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+    })
     public List<ClientDTO> getAllClients(){
         return clientService.getAll();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Просмотреть данные клиента")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Клиент найден"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "404", description = "Клиент не найден")
+    })
     public ClientDTO getClient(@PathVariable Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<Client> clientOptional = clientRepository.findById(id);
@@ -76,6 +90,13 @@ public class ClientController {
     }
 
     @PostMapping
+    @Operation(summary = "Добавить клиента")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Клиент добавлен"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "400", description = "Некорректно введены данные"),
+            @ApiResponse(responseCode = "409", description = "Попытка добавления дублирующей записи")
+    })
     public ResponseEntity<?> createClient(@Valid @RequestBody Client client, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             // Обработка ошибок валидации
@@ -115,6 +136,13 @@ public class ClientController {
     }
 
     @PutMapping("/update/{id}")
+    @Operation(summary = "Добавить клиента")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Данные обновлены"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "400", description = "Некорректно введены данные"),
+            @ApiResponse(responseCode = "404", description = "Клиент не найден")
+    })
     public ResponseEntity<?> updateClient(@PathVariable Long id,@Valid @RequestBody ClientDTO clientDTO,
                                BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
