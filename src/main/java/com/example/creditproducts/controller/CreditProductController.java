@@ -26,6 +26,7 @@ public class CreditProductController {
 
     public CreditProductController (CreditProductService creditProductService){
         this.creditProductService = creditProductService;
+
     }
 
     @GetMapping
@@ -75,6 +76,8 @@ public class CreditProductController {
         creditProductService.update(creditProductDTO,id);
         return new ResponseEntity<>("Условия обновлены", HttpStatus.CREATED);
     }
+
+
 
     @Autowired
     public void setCreditProductRepository(CreditProductRepository creditProductRepository){

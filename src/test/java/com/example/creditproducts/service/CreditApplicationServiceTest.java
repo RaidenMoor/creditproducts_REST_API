@@ -49,6 +49,8 @@ class CreditApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
+        creditApplicationService.setCreditProductService(creditProductService);
+        creditApplicationService.setIssuedLoanService(issuedLoanService);
         testDto = new CreditApplicationDTO();
         testDto.setId(1L);
         testDto.setAmount(BigDecimal.valueOf(10000.0));
@@ -82,17 +84,16 @@ class CreditApplicationServiceTest {
 
     @Test
     void getAllByClientId_ShouldReturnListOfApplications() {
-        // Arrange
+
         Long clientId = 1L;
         when(creditApplicationRepository.findByClientId(clientId))
                 .thenReturn(Collections.singletonList(testEntity));
         when(creditApplicationMapper.toDTOs(anyList()))
                 .thenReturn(Collections.singletonList(testDto));
 
-        // Act
+
         List<CreditApplicationDTO> result = creditApplicationService.getAllByClientid(clientId);
 
-        // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(testDto, result.get(0));
@@ -101,17 +102,16 @@ class CreditApplicationServiceTest {
 
     @Test
     void updateStatus_WhenApplicationExists_ShouldUpdateStatus() {
-        // Arrange
+
         Long id = 1L;
         String newStatus = "APPROVED";
         when(creditApplicationRepository.findById(id)).thenReturn(Optional.of(testEntity));
         when(creditApplicationRepository.save(any())).thenReturn(testEntity);
         when(creditApplicationMapper.toDTO(testEntity)).thenReturn(testDto);
 
-        // Act
+
         CreditApplicationDTO result = creditApplicationService.updateStatus(id, newStatus, issuedLoanService);
 
-        // Assert
         assertNotNull(result);
         assertEquals(testDto, result);
         verify(creditApplicationRepository).findById(id);
@@ -120,15 +120,15 @@ class CreditApplicationServiceTest {
 
     @Test
     void updateStatus_WhenApplicationNotExists_ShouldReturnNull() {
-        // Arrange
+
         Long id = 99L;
         String newStatus = "APPROVED";
         when(creditApplicationRepository.findById(id)).thenReturn(Optional.empty());
 
-        // Act
+
         CreditApplicationDTO result = creditApplicationService.updateStatus(id, newStatus);
 
-        // Assert
+
         assertNull(result);
         verify(creditApplicationRepository).findById(id);
         verify(creditApplicationRepository, never()).save(any());
@@ -136,7 +136,7 @@ class CreditApplicationServiceTest {
 
     @Test
     void updateStatus_WhenStatusApproved_ShouldCreateLoan() {
-        // Arrange
+
         Long id = 1L;
         String newStatus = "APPROVED";
         when(creditApplicationRepository.findById(id)).thenReturn(Optional.of(testEntity));
@@ -144,27 +144,25 @@ class CreditApplicationServiceTest {
         when(creditApplicationMapper.toDTO(testEntity)).thenReturn(testDto);
         when(issuedLoanService.createLoan(testDto)).thenReturn(new IssuedLoanDTO());
 
-        // Act
         CreditApplicationDTO result = creditApplicationService.updateStatus(id, newStatus, issuedLoanService);
 
-        // Assert
+
         assertNotNull(result);
         verify(issuedLoanService).createLoan(testDto);
     }
 
     @Test
     void create_WithValidData_ShouldReturnCreatedApplication() {
-        // Arrange
 
         when(creditApplicationMapper.toEntity(testDto)).thenReturn(testEntity);
         when(creditApplicationRepository.existsById(testEntity.getId())).thenReturn(false);
         when(creditApplicationRepository.save(testEntity)).thenReturn(testEntity);
         when(creditApplicationMapper.toDTO(testEntity)).thenReturn(testDto);
 
-        // Act
+
         CreditApplicationDTO result = creditApplicationService.create(testDto, testCreditProductDto);
 
-        // Assert
+
         assertNotNull(result);
         assertEquals(testDto, result);
         verify(creditApplicationRepository).save(testEntity);
@@ -172,32 +170,30 @@ class CreditApplicationServiceTest {
 
     @Test
     void create_WithNullInput_ShouldReturnNull() {
-        // Act
+
         CreditApplicationDTO result = creditApplicationService.create(null);
 
-        // Assert
+
         assertNull(result);
     }
 
     @Test
     void create_WithExistingId_ShouldReturnNull() {
-        // Arrange
+
         when(creditApplicationMapper.toEntity(testDto)).thenReturn(testEntity);
         when(creditApplicationRepository.existsById(testEntity.getId())).thenReturn(true);
 
-        // Act
         CreditApplicationDTO result = creditApplicationService.create(testDto, testCreditProductDto);
 
-        // Assert
         assertNull(result);
         verify(creditApplicationRepository, never()).save(any());
     }
 
     @Test
     void create_WithAmountBelowMin_ShouldThrowException() {
-        // Arrange
+
         testDto.setAmount(BigDecimal.valueOf(4000.0));
-        // Act & Assert
+
         assertThrows(InvalidAmountException.class, () -> {
             creditApplicationService.create(testDto, testCreditProductDto);
         });
@@ -205,10 +201,9 @@ class CreditApplicationServiceTest {
 
     @Test
     void create_WithAmountAboveMax_ShouldThrowException() {
-        // Arrange
+
         testDto.setAmount(BigDecimal.valueOf(30000.0));
 
-        // Act & Assert
         assertThrows(InvalidAmountException.class, () -> {
             creditApplicationService.create(testDto, testCreditProductDto);
         });
@@ -216,10 +211,10 @@ class CreditApplicationServiceTest {
 
     @Test
     void create_WithTermBelowMin_ShouldThrowException() {
-        // Arrange
+
         testDto.setTermMonths(5);
 
-        // Act & Assert
+
         assertThrows(InvalidTermMonthsException.class, () -> {
             creditApplicationService.create(testDto, testCreditProductDto);
         });
@@ -227,10 +222,10 @@ class CreditApplicationServiceTest {
 
     @Test
     void create_WithTermAboveMax_ShouldThrowException() {
-        // Arrange
+
         testDto.setTermMonths(25);
 
-        // Act & Assert
+
         assertThrows(InvalidTermMonthsException.class, () -> {
             creditApplicationService.create(testDto, testCreditProductDto);
         });

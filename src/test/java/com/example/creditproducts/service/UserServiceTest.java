@@ -54,14 +54,13 @@ public class UserServiceTest {
 
     @Test
     void getByUsername_ExistingUsername_ReturnsUserDTO() {
-        // Arrange
+
         when(userRepository.getByUsername("testUser")).thenReturn(userEntity);
         when(userMapper.toDTO(userEntity)).thenReturn(userDTO);
 
-        // Act
+
         UserDTO result = userService.getByUsername("testUser");
 
-        // Assert
         assertNotNull(result);
         assertEquals("testUser", result.getUsername());
         verify(userRepository, times(1)).getByUsername("testUser");
@@ -70,13 +69,11 @@ public class UserServiceTest {
 
     @Test
     void getByUsername_NonExistingUsername_ReturnsNull() {
-        // Arrange
+
         when(userRepository.getByUsername("nonExistingUser")).thenReturn(null);
 
-        // Act
         UserDTO result = userService.getByUsername("nonExistingUser");
 
-        // Assert
         assertNull(result);
         verify(userRepository, times(1)).getByUsername("nonExistingUser");
         verify(userMapper, never()).toDTO(any()); // Подтверждаем, что toDTO никогда не вызывался
@@ -84,16 +81,14 @@ public class UserServiceTest {
 
     @Test
     void create_NewUser_ReturnsCreatedUserDTO() {
-        // Arrange
+
         when(roleService.getByTitle(USER)).thenReturn(userRole);
         when(userMapper.toEntity(any(UserDTO.class))).thenReturn(userEntity);
         when(userRepository.save(userEntity)).thenReturn(userEntity);
         when(userMapper.toDTO(userEntity)).thenReturn(userDTO);
 
-        // Act
         UserDTO result = userService.create(userDTO);
 
-        // Assert
         assertNotNull(result);
         assertEquals("testUser", result.getUsername());
         assertEquals("password", result.getPassword());
@@ -108,17 +103,17 @@ public class UserServiceTest {
 
     @Test
     void create_RoleDoesNotExist_CreatesNewRole() {
-        // Arrange
+
         when(roleService.getByTitle(USER)).thenReturn(null);
         when(roleService.create(any(Role.class))).thenReturn(userRole);
         when(userMapper.toEntity(any(UserDTO.class))).thenReturn(userEntity);
         when(userRepository.save(userEntity)).thenReturn(userEntity);
         when(userMapper.toDTO(userEntity)).thenReturn(userDTO);
 
-        // Act
+
         UserDTO result = userService.create(userDTO);
 
-        // Assert
+
         assertNotNull(result);
         verify(roleService, times(1)).getByTitle(USER);
         verify(roleService, times(1)).create(any(Role.class));

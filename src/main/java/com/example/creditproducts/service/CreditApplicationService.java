@@ -23,10 +23,8 @@ public class CreditApplicationService extends GenericService<CreditApplication, 
         mapper = creditApplicationMapper;
     }
 
-    @Autowired
     IssuedLoanService issuedLoanService;
 
-    @Autowired
     CreditProductService creditProductService;
 
     public List<CreditApplicationDTO> getAllByClientid(Long id) {
@@ -98,5 +96,16 @@ public class CreditApplicationService extends GenericService<CreditApplication, 
             return null;
         }
         return mapper.toDTO(repository.save(entity));
+    }
+
+    @Autowired
+    public void setCreditProductService(CreditProductService creditProductService){
+        this.creditProductService = creditProductService;
+
+    }
+
+    @Autowired
+    public void setIssuedLoanService(IssuedLoanService issuedLoanService){
+        this.issuedLoanService = issuedLoanService;
     }
 }

@@ -86,7 +86,7 @@ class IssuedLoanServiceTest {
 
     @Test
     void createLoan_ShouldCreateCorrectLoan() {
-        // Arrange
+
 
         when(issuedLoanMapper.toEntity(any(IssuedLoanDTO.class)))
                 .thenReturn(testEntity);
@@ -95,17 +95,17 @@ class IssuedLoanServiceTest {
         when(issuedLoanMapper.toDTO(testEntity))
                 .thenReturn(testLoanDTO);
 
-        // Act
+
         IssuedLoanDTO result = issuedLoanService.createLoan(testApplicationDto, testProduct);
 
-        // Assert
+
         assertNotNull(result);
         assertEquals(testApplication.getId(), result.getCreditApplicationId());
         assertEquals(LocalDate.now(), result.getStartDate());
         assertEquals(LocalDate.now().plusMonths(12), result.getEndDate());
         assertEquals(new BigDecimal("10000.00"), result.getRemainingAmount());
 
-        // Проверяем, что ежемесячный платеж рассчитан с точностью до 3 знаков
+
         assertEquals(0, new BigDecimal("888.492").compareTo(result.getMonthlyPayment()));
 
 
@@ -116,7 +116,6 @@ class IssuedLoanServiceTest {
 
     @Test
     void calculateMonthlyAmount_ShouldCalculateCorrectly() {
-        // Arrange
 
 
         // Ожидаемый расчет:
@@ -126,10 +125,9 @@ class IssuedLoanServiceTest {
         // 1 - (1 + m)^-n ≈ 0.112551
         // Ежемесячный платеж = 10000 * (0.01 / 0.112551) ≈ 888.488
 
-        // Act
         BigDecimal result = issuedLoanService.calculateMonthlyAmount(testApplicationDto, testProduct);
 
-        // Assert
+
         assertNotNull(result);
         assertEquals(0, new BigDecimal("888.488").compareTo(result));
 
@@ -137,7 +135,6 @@ class IssuedLoanServiceTest {
 
     @Test
     void calculateMonthlyAmount_WithDifferentParameters_ShouldCalculateCorrectly() {
-        // Arrange
         CreditApplicationDTO application = new CreditApplicationDTO();
         application.setCreditProductId(2L);
         application.setAmount(new BigDecimal("50000.00"));
@@ -155,17 +152,15 @@ class IssuedLoanServiceTest {
         // 1 - (1 + m)^-n ≈ 0.172151
         // Ежемесячный платеж = 50000 * (0.007916667 / 0.172151) ≈ 2353.674
 
-        // Act
         BigDecimal result = issuedLoanService.calculateMonthlyAmount(application, testProduct);
 
-        // Assert
         assertNotNull(result);
         assertEquals(0, new BigDecimal("2353.674").compareTo(result.setScale(3, RoundingMode.HALF_UP)));
     }
 
     @Test
     void createLoan_WithNullInput_ShouldThrowException() {
-        // Act & Assert
+
         assertThrows(NullPointerException.class, () -> {
             issuedLoanService.createLoan(null);
         });
@@ -173,7 +168,7 @@ class IssuedLoanServiceTest {
 
     @Test
     void calculateMonthlyAmount_WithNullInput_ShouldThrowException() {
-        // Act & Assert
+
         assertThrows(NullPointerException.class, () -> {
             issuedLoanService.calculateMonthlyAmount(null);
         });
@@ -181,21 +176,10 @@ class IssuedLoanServiceTest {
 
     @Test
     void createLoan_ShouldSetCorrectDates() {
-        // Arrange
         testApplicationDto.setTermMonths(36); // 3 года
 
-
-//        when(issuedLoanMapper.toEntity(any(IssuedLoanDTO.class)))
-//                .thenReturn(testEntity);
-//        when(issuedLoanRepository.save(testEntity))
-//                .thenReturn(testEntity);
-//        when(issuedLoanMapper.toDTO(testEntity))
-//                .thenReturn(testLoanDTO);
-
-        // Act
         IssuedLoanDTO result = issuedLoanService.createLoan(testApplicationDto, testProduct);
 
-        // Assert
         assertNotNull(result);
         assertEquals(LocalDate.now(), result.getStartDate());
         assertEquals(LocalDate.now().plusMonths(36), result.getEndDate());

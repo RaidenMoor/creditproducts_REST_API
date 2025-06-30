@@ -26,23 +26,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
+
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired
+
     private UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
+
     UserService userService;
+    public AuthController(UserService userService){
+        this.userService = userService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -74,6 +77,26 @@ public class AuthController {
         userService.create(userDTO);
 
         return ResponseEntity.ok("User registered successfully!");
+    }
+
+    @Autowired
+    public void setAuthenticationManager(AuthenticationManager authenticationManager){
+        this.authenticationManager = authenticationManager;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder){
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
+    public void setJwtUtils(JwtUtils jwtUtils){
+        this.jwtUtils = jwtUtils;
     }
 
 }
