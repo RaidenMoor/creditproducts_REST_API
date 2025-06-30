@@ -8,13 +8,12 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "roles")
-@NoArgsConstructor
 @ToString
 public class Role{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "default_gen")
-    @SequenceGenerator(name = "default_gen", initialValue = 2)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "default_gen")
+    @SequenceGenerator(name = "roles_seq", initialValue = 2)
     @Column(name = "id")
     private Long id;
 
@@ -29,6 +28,10 @@ public class Role{
     public Role(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    public Role(){
+
     }
 
     public Long getId() {

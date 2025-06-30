@@ -36,6 +36,8 @@ public class IssuedLoan extends GenericModel{
             foreignKeyDefinition = "FOREIGN KEY (application_id) REFERENCES credit_applications(id) ON DELETE RESTRICT"
     ))
     private CreditApplication creditApplication;
+
+
     public LocalDate getStartDate() {
         return startDate;
     }

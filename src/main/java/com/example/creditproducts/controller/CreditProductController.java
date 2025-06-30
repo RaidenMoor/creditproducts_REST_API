@@ -7,6 +7,9 @@ import com.example.creditproducts.exception.DublicateException;
 import com.example.creditproducts.model.CreditProduct;
 import com.example.creditproducts.repository.CreditProductRepository;
 import com.example.creditproducts.service.CreditProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,15 +29,26 @@ public class CreditProductController {
 
     public CreditProductController (CreditProductService creditProductService){
         this.creditProductService = creditProductService;
+
     }
 
     @GetMapping
+    @Operation(summary = "Просмотреть все кредитные продукты")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список кредитный продуктов предоставлен")
+    })
     public List<CreditProductDTO> getCreditProducts(){
         return creditProductService.getAll();
 
     }
 
     @GetMapping(value = "/{id}")
+    @Operation(summary = "Просмотр кредитного продукта")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Кредитный пролукт найден"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "404", description = "Кредитный продукт не найден")
+    })
     public CreditProductDTO getCreditProducts(@PathVariable Long id){
 
         Optional<CreditProduct> creditProduct = creditProductRepository.findById(id);
@@ -46,6 +60,13 @@ public class CreditProductController {
     }
 
     @PostMapping
+    @Operation(summary = "Добавить кредитный продукт")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Кредитный продукт добавлен"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "400", description = "Некорректно введены данные"),
+            @ApiResponse(responseCode = "409", description = "Попытка добавления дублирующей записи")
+    })
     public ResponseEntity<?> createCreditProduct(@Valid @RequestBody CreditProduct creditProduct,
                                       BindingResult bindingResult){
         if(bindingResult.hasErrors())
@@ -61,6 +82,13 @@ public class CreditProductController {
     }
 
     @PutMapping(value = "/{id}")
+    @Operation(summary = "Изменить условия кредитного продукта")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Условия обновлены"),
+            @ApiResponse(responseCode = "403", description = "Нет прав доступа"),
+            @ApiResponse(responseCode = "400", description = "Некорректно введены данные"),
+            @ApiResponse(responseCode = "409", description = "Попытка добавления дублирующей записи")
+    })
     public ResponseEntity<?> updateCreditProduct(@PathVariable Long id,
                                                  @Valid @RequestBody CreditProductDTO creditProductDTO,
                                                  BindingResult bindingResult){
@@ -75,6 +103,8 @@ public class CreditProductController {
         creditProductService.update(creditProductDTO,id);
         return new ResponseEntity<>("Условия обновлены", HttpStatus.CREATED);
     }
+
+
 
     @Autowired
     public void setCreditProductRepository(CreditProductRepository creditProductRepository){

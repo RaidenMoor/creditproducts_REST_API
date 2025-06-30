@@ -19,18 +19,5 @@ public class ClientService extends GenericService<Client, ClientDTO>{
         mapper = clientMapper;
     }
 
-//    @Override
-//    public ClientDTO update(ClientDTO clientDTO, Long id){
-//        Client entity = mapper.toEntity(clientDTO);
-//        LocalDate registerDate = clientDTO.getRegistrationDate();
-//
-//        if (id != null) {
-//            Client existingEntity = repository.findById(id).orElse(null);
-//            if (existingEntity != null) {
-//                entity.setId(id);
-//                return mapper.toDTO(repository.save(entity));
-//            }
-//        }
-//        return null;
-//    }
+
 }

@@ -57,4 +57,36 @@ public class IssuedLoanService extends GenericService<IssuedLoan, IssuedLoanDTO>
         monthlyAmount = monthlyAmount.setScale(3, RoundingMode.HALF_UP);
         return  monthlyAmount;
     }
+
+    public BigDecimal calculateMonthlyAmount(CreditApplicationDTO application, CreditProductDTO product){
+        BigDecimal monthlyAmount;
+
+        BigDecimal m = product.getInterestRate().divide(BigDecimal.valueOf(1200), MathContext.DECIMAL128);
+        BigDecimal onePlusM = BigDecimal.ONE.add(m);
+        BigDecimal termMonths = BigDecimal.valueOf(application.getTermMonths());
+        BigDecimal power = onePlusM.pow(termMonths.negate().intValue(), MathContext.DECIMAL128);
+        BigDecimal oneMinusPower = BigDecimal.ONE.subtract(power);
+
+        monthlyAmount = application.getAmount().multiply(m.divide(oneMinusPower, MathContext.DECIMAL128), MathContext.DECIMAL128);
+
+        monthlyAmount = monthlyAmount.setScale(3, RoundingMode.HALF_UP);
+        return  monthlyAmount;
+    }
+    public IssuedLoanDTO createLoan(CreditApplicationDTO creditApplicationDTO, CreditProductDTO creditProductDTO){
+        IssuedLoanDTO issuedLoanDTO = new IssuedLoanDTO();
+        issuedLoanDTO.setCreditApplicationId(creditApplicationDTO.getId());
+        issuedLoanDTO.setStartDate(LocalDate.now());
+        LocalDate endDate = LocalDate.now().plusMonths(creditApplicationDTO.getTermMonths());
+        issuedLoanDTO.setEndDate(endDate);
+        BigDecimal monthlyAmount = calculateMonthlyAmount(creditApplicationDTO, creditProductDTO);
+        issuedLoanDTO.setMonthlyPayment(monthlyAmount);
+        issuedLoanDTO.setRemainingAmount(creditApplicationDTO.getAmount());
+
+        IssuedLoan entity = mapper.toEntity(issuedLoanDTO);
+
+        return mapper.toDTO(repository.save(entity));
+
+
+    }
+
 }

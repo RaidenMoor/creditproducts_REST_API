@@ -6,10 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 @Entity
 @Table(name = "credit_products")
@@ -40,7 +37,7 @@ public class CreditProduct extends GenericModel{
     private boolean isActive;
 
     @OneToMany(mappedBy = "creditProduct")
-    private Set<CreditApplication> applications;
+    private Set<CreditApplication> applications = new HashSet<>();
 
     public String getName() {
         return name;
