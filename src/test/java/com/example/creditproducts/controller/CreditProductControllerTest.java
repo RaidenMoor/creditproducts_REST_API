@@ -49,8 +49,7 @@ class CreditProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        creditProductController = new CreditProductController(creditProductService);
-        creditProductController.setCreditProductRepository(creditProductRepository);
+        creditProductController = new CreditProductController(creditProductService, creditProductRepository);
 
         mockMvc = MockMvcBuilders.standaloneSetup(creditProductController).build();
 

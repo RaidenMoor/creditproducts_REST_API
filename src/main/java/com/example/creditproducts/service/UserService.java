@@ -26,9 +26,6 @@ public class UserService extends GenericService<User, UserDTO> {
     }
 
 
-
-
-
     public UserDTO getByUsername(String login) {
         User user = ((UserRepository) repository).getByUsername(login);
         if (user == null) {
@@ -51,10 +48,6 @@ public class UserService extends GenericService<User, UserDTO> {
         User entity = mapper.toEntity(newUser);
         return mapper.toDTO(repository.save(entity));
     }
-
-
-
-
 
 
 }

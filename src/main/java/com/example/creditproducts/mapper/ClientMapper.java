@@ -17,8 +17,10 @@ public class ClientMapper extends GenericMapper<Client, ClientDTO>
     ClientRepository clientRepository;
     UserRepository userRepository;
 
-    public ClientMapper() {
+    public ClientMapper(ClientRepository clientRepository, UserRepository userRepository) {
         super(Client.class, ClientDTO.class);
+        this.clientRepository = clientRepository;
+        this.userRepository = userRepository;
     }
 
     @PostConstruct

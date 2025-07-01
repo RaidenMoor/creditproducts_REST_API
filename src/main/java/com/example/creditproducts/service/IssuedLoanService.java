@@ -6,8 +6,7 @@ import com.example.creditproducts.dto.IssuedLoanDTO;
 import com.example.creditproducts.mapper.IssuedLoanMapper;
 import com.example.creditproducts.model.IssuedLoan;
 import com.example.creditproducts.repository.IssuedLoanRepository;
-import jakarta.persistence.Access;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,22 +16,29 @@ import java.time.LocalDate;
 
 @Service
 public class IssuedLoanService extends GenericService<IssuedLoan, IssuedLoanDTO> {
-    public IssuedLoanService(IssuedLoanRepository issuedLoanRepository, IssuedLoanMapper issuedLoanMapper){
+    CreditProductService creditProductService;
+    public IssuedLoanService(IssuedLoanRepository issuedLoanRepository, IssuedLoanMapper issuedLoanMapper,
+                             CreditProductService creditProductService){
         repository = issuedLoanRepository;
         mapper = issuedLoanMapper;
+
+        this.creditProductService = creditProductService;
     }
 
-    @Autowired
-    CreditProductService creditProductService;
+
 
     public IssuedLoanDTO createLoan(CreditApplicationDTO creditApplicationDTO){
         IssuedLoanDTO issuedLoanDTO = new IssuedLoanDTO();
+
         issuedLoanDTO.setCreditApplicationId(creditApplicationDTO.getId());
         issuedLoanDTO.setStartDate(LocalDate.now());
+
         LocalDate endDate = LocalDate.now().plusMonths(creditApplicationDTO.getTermMonths());
         issuedLoanDTO.setEndDate(endDate);
+
         BigDecimal monthlyAmount = calculateMonthlyAmount(creditApplicationDTO);
         issuedLoanDTO.setMonthlyPayment(monthlyAmount);
+
         issuedLoanDTO.setRemainingAmount(creditApplicationDTO.getAmount());
 
         IssuedLoan entity = mapper.toEntity(issuedLoanDTO);
@@ -74,19 +80,21 @@ public class IssuedLoanService extends GenericService<IssuedLoan, IssuedLoanDTO>
     }
     public IssuedLoanDTO createLoan(CreditApplicationDTO creditApplicationDTO, CreditProductDTO creditProductDTO){
         IssuedLoanDTO issuedLoanDTO = new IssuedLoanDTO();
+
         issuedLoanDTO.setCreditApplicationId(creditApplicationDTO.getId());
         issuedLoanDTO.setStartDate(LocalDate.now());
+
         LocalDate endDate = LocalDate.now().plusMonths(creditApplicationDTO.getTermMonths());
         issuedLoanDTO.setEndDate(endDate);
+
         BigDecimal monthlyAmount = calculateMonthlyAmount(creditApplicationDTO, creditProductDTO);
         issuedLoanDTO.setMonthlyPayment(monthlyAmount);
+
         issuedLoanDTO.setRemainingAmount(creditApplicationDTO.getAmount());
 
         IssuedLoan entity = mapper.toEntity(issuedLoanDTO);
 
         return mapper.toDTO(repository.save(entity));
-
-
     }
 
 }

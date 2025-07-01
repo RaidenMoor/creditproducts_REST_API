@@ -13,6 +13,7 @@ import com.example.creditproducts.model.ApplicationStatus;
 import com.example.creditproducts.model.CreditApplication;
 import com.example.creditproducts.model.CreditProduct;
 import com.example.creditproducts.repository.CreditApplicationRepository;
+import com.example.creditproducts.service.CreditApplication.CreditApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

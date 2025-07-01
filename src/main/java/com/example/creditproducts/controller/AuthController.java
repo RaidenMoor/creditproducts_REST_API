@@ -8,6 +8,7 @@ import com.example.creditproducts.jwt.JwtUtils;
 import com.example.creditproducts.repository.RoleRepository;
 import com.example.creditproducts.repository.UserRepository;
 import com.example.creditproducts.security.CustomUserDetails;
+import com.example.creditproducts.service.SecurityService;
 import com.example.creditproducts.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,24 +32,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
 
-    private AuthenticationManager authenticationManager;
-
+    private final SecurityService securityService;
+    private final UserService userService;
     @Autowired
-    private JwtUtils jwtUtils;
-
-
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-
-    private PasswordEncoder passwordEncoder;
-
-
-    UserService userService;
-    public AuthController(UserService userService){
+    public AuthController(UserService userService,
+                          SecurityService securityService){
         this.userService = userService;
+        this.securityService = securityService;
     }
 
     @PostMapping("/login")
@@ -60,23 +50,8 @@ public class AuthController {
     })
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        if(!userRepository.existsByUsername(request.getUsername())&& !request.getUsername().equals("admin"))
-            throw new UsernameNotFoundException(request.getUsername());
-
-        // 1. Создаём объект аутентификации
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()));
-
-        // 2. Сохраняем аутентификацию в контексте
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        // 3. Генерируем токен
-        String jwt = jwtUtils.generateToken((CustomUserDetails) authentication.getPrincipal());
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         // Возвращаем токен
-        return ResponseEntity.ok(new JwtResponse(jwt));
+        return ResponseEntity.ok(new JwtResponse(securityService.loginUser(request)));
     }
 
     @PostMapping("/register")
@@ -85,37 +60,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Рестрация прошла успешно"),
     })
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        // Проверка на существование пользователя
-        if (userRepository.existsByUsername(request.getUsername())) {
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
-        }
-        UserDTO userDTO = new UserDTO();
-        userDTO.setPassword(passwordEncoder.encode(request.getPassword()));
-        userDTO.setUsername(request.getUsername());
 
-        userService.create(userDTO);
-
-        return ResponseEntity.ok("Пользователь успешно зарегистрирован!");
+        return securityService.createNewUser(request);
     }
-
-    @Autowired
-    public void setAuthenticationManager(AuthenticationManager authenticationManager){
-        this.authenticationManager = authenticationManager;
-    }
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder){
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Autowired
-    public void setJwtUtils(JwtUtils jwtUtils){
-        this.jwtUtils = jwtUtils;
-    }
-
 }

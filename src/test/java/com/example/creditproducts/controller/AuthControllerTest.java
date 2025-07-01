@@ -11,6 +11,7 @@ import com.example.creditproducts.model.User;
 import com.example.creditproducts.repository.RoleRepository;
 import com.example.creditproducts.repository.UserRepository;
 import com.example.creditproducts.security.CustomUserDetails;
+import com.example.creditproducts.service.SecurityService;
 import com.example.creditproducts.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,9 @@ public class AuthControllerTest {
     private Authentication authentication;
 
     @Mock
+    private SecurityService securityService;
+
+    @Mock
     private SecurityContext securityContext;
 
     private LoginRequest loginRequest;
@@ -73,11 +77,7 @@ public class AuthControllerTest {
 
     @BeforeEach
     void setUp() {
-        authController = new AuthController(userService);
-        authController.setAuthenticationManager(authenticationManager);
-        authController.setUserRepository(userRepository);
-        authController.setPasswordEncoder(passwordEncoder);
-        authController.setJwtUtils(jwtUtils);
+        authController = new AuthController(userService, securityService);
 
 
         mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
