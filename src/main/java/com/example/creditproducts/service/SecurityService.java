@@ -7,7 +7,6 @@ import com.example.creditproducts.exception.AccessException;
 import com.example.creditproducts.exception.ClientNotFoundException;
 import com.example.creditproducts.jwt.JwtUtils;
 import com.example.creditproducts.model.Client;
-import com.example.creditproducts.model.CreditApplication;
 import com.example.creditproducts.model.User;
 import com.example.creditproducts.repository.ClientRepository;
 import com.example.creditproducts.repository.UserRepository;

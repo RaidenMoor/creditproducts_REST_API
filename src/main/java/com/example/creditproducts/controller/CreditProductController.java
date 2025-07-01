@@ -1,7 +1,6 @@
 package com.example.creditproducts.controller;
 
 import com.example.creditproducts.dto.CreditProductDTO;
-import com.example.creditproducts.exception.ClientNotFoundException;
 import com.example.creditproducts.exception.CreditProductNotFoundException;
 import com.example.creditproducts.exception.DublicateException;
 import com.example.creditproducts.model.CreditProduct;

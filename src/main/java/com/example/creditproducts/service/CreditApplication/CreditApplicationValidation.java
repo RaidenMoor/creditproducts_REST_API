@@ -8,7 +8,6 @@ import com.example.creditproducts.exception.InvalidTermMonthsException;
 import com.example.creditproducts.mapper.CreditProductMapper;
 import com.example.creditproducts.model.CreditProduct;
 import com.example.creditproducts.repository.CreditProductRepository;
-import com.example.creditproducts.service.CreditProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

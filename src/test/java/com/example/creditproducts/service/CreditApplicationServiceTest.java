@@ -50,8 +50,7 @@ class CreditApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
-        creditApplicationService.setCreditProductService(creditProductService);
-        creditApplicationService.setIssuedLoanService(issuedLoanService);
+
         testDto = new CreditApplicationDTO();
         testDto.setId(1L);
         testDto.setAmount(BigDecimal.valueOf(10000.0));

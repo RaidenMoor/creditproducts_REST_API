@@ -3,7 +3,6 @@ package com.example.creditproducts.controller;
 import com.example.creditproducts.dto.ClientDTO;
 import com.example.creditproducts.exception.DublicateException;
 import com.example.creditproducts.repository.ClientRepository;
-import com.example.creditproducts.repository.UserRepository;
 import com.example.creditproducts.service.ClientService;
 import com.example.creditproducts.service.SecurityService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,12 +1,8 @@
 package com.example.creditproducts.controller;
 
 import com.example.creditproducts.dto.CreditApplicationDTO;
-import com.example.creditproducts.exception.AccessException;
 import com.example.creditproducts.exception.ApplicationNotFoundException;
 import com.example.creditproducts.exception.ClientNotFoundException;
-import com.example.creditproducts.exception.InvalidApplicationStatusException;
-import com.example.creditproducts.model.Client;
-import com.example.creditproducts.model.CreditApplication;
 import com.example.creditproducts.repository.ClientRepository;
 import com.example.creditproducts.repository.CreditApplicationRepository;
 import com.example.creditproducts.service.CreditApplication.CreditApplicationService;
@@ -19,15 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/applications")

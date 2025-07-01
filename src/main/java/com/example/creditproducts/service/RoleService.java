@@ -2,7 +2,6 @@ package com.example.creditproducts.service;
 
 import com.example.creditproducts.model.Role;
 import com.example.creditproducts.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

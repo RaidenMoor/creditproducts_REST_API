@@ -1,13 +1,8 @@
 package com.example.creditproducts.controller;
 
-import com.example.creditproducts.dto.UserDTO;
 import com.example.creditproducts.dto.security.JwtResponse;
 import com.example.creditproducts.dto.security.LoginRequest;
 import com.example.creditproducts.dto.security.RegisterRequest;
-import com.example.creditproducts.jwt.JwtUtils;
-import com.example.creditproducts.repository.RoleRepository;
-import com.example.creditproducts.repository.UserRepository;
-import com.example.creditproducts.security.CustomUserDetails;
 import com.example.creditproducts.service.SecurityService;
 import com.example.creditproducts.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,13 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
