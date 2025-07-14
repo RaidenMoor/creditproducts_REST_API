@@ -6,6 +6,7 @@ import com.example.creditproducts.model.User;
 import com.example.creditproducts.repository.ClientRepository;
 import com.example.creditproducts.repository.UserRepository;
 import com.example.creditproducts.service.ClientService;
+import com.example.creditproducts.service.SecurityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,9 @@ class ClientControllerTest {
     private ClientService clientService;
 
     @Mock
+    private SecurityService securityService;
+
+    @Mock
     private ClientRepository clientRepository;
 
     @Mock
@@ -58,8 +62,9 @@ class ClientControllerTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        clientController = new ClientController(clientService);
-        clientController.setClientRepository(clientRepository);
+        clientController = new ClientController(clientService, clientRepository,
+                securityService);
+
 
         mockMvc = MockMvcBuilders.standaloneSetup(clientController).build();
 

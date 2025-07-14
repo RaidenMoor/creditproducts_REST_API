@@ -2,10 +2,9 @@ package com.example.creditproducts.service;
 
 import com.example.creditproducts.dto.ClientDTO;
 import com.example.creditproducts.mapper.ClientMapper;
-import com.example.creditproducts.mapper.CreditProductMapper;
 import com.example.creditproducts.model.Client;
 import com.example.creditproducts.repository.ClientRepository;
-import com.example.creditproducts.repository.CreditProductRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

@@ -1,8 +1,6 @@
 package com.example.creditproducts.controller;
 
-import com.example.creditproducts.controller.CreditApplicationController;
 import com.example.creditproducts.dto.CreditApplicationDTO;
-import com.example.creditproducts.exception.AccessException;
 import com.example.creditproducts.exception.ApplicationNotFoundException;
 import com.example.creditproducts.exception.ClientNotFoundException;
 import com.example.creditproducts.exception.InvalidApplicationStatusException;
@@ -12,7 +10,8 @@ import com.example.creditproducts.model.CreditApplication;
 import com.example.creditproducts.model.User;
 import com.example.creditproducts.repository.ClientRepository;
 import com.example.creditproducts.repository.CreditApplicationRepository;
-import com.example.creditproducts.service.CreditApplicationService;
+import com.example.creditproducts.service.CreditApplication.CreditApplicationService;
+import com.example.creditproducts.service.SecurityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,17 +21,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +58,10 @@ public class CreditApplicationControllerTest {
     private SecurityContext securityContext;
 
     @Mock
+    private SecurityService securityService;
+
+
+    @Mock
     private BindingResult bindingResult;
 
 
@@ -73,8 +72,9 @@ public class CreditApplicationControllerTest {
 
     @BeforeEach
     void setUp() {
-        creditApplicationController = new CreditApplicationController(creditApplicationService);
-        creditApplicationController.setCreditApplicationRepository(creditApplicationRepository);
+        creditApplicationController = new CreditApplicationController(creditApplicationRepository,
+                creditApplicationService, securityService, clientRepository);
+
 
         mockMvc = MockMvcBuilders.standaloneSetup(creditApplicationController).build();
 
@@ -118,7 +118,7 @@ public class CreditApplicationControllerTest {
         when(securityContext.getAuthentication()).thenReturn(null);
 
 
-        String result = creditApplicationController.getCreditApplication(1L);
+        CreditApplicationDTO result = creditApplicationController.getCreditApplication(1L);
 
 
         assertNotNull(result);

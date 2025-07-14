@@ -2,12 +2,15 @@ package com.example.creditproducts.service;
 
 import com.example.creditproducts.model.Role;
 import com.example.creditproducts.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RoleService {
     private RoleRepository roleRepository;
+
+    public RoleService (RoleRepository roleRepository){
+        this.roleRepository = roleRepository;
+    }
 
 
     public Role getByTitle(String title) {
@@ -23,8 +26,5 @@ public class RoleService {
     }
 
 
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
+
 }

@@ -1,7 +1,6 @@
 package com.example.creditproducts.controller;
 
 import com.example.creditproducts.dto.CreditProductDTO;
-import com.example.creditproducts.exception.ClientNotFoundException;
 import com.example.creditproducts.exception.CreditProductNotFoundException;
 import com.example.creditproducts.exception.DublicateException;
 import com.example.creditproducts.model.CreditProduct;
@@ -27,8 +26,11 @@ public class CreditProductController {
     CreditProductRepository creditProductRepository;
     CreditProductService creditProductService;
 
-    public CreditProductController (CreditProductService creditProductService){
+    @Autowired
+    public CreditProductController (CreditProductService creditProductService,
+                                    CreditProductRepository creditProductRepository){
         this.creditProductService = creditProductService;
+        this.creditProductRepository = creditProductRepository;
 
     }
 
@@ -51,10 +53,9 @@ public class CreditProductController {
     })
     public CreditProductDTO getCreditProducts(@PathVariable Long id){
 
-        Optional<CreditProduct> creditProduct = creditProductRepository.findById(id);
-        if (creditProduct.isEmpty()) {
-            throw new CreditProductNotFoundException(id);
-        }
+        creditProductRepository.findById(id).
+                orElseThrow(() -> new CreditProductNotFoundException(id));
+
         return creditProductService.getById(id);
 
     }
@@ -95,19 +96,10 @@ public class CreditProductController {
         if(bindingResult.hasErrors())
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
 
-        Optional<CreditProduct> creditProduct = creditProductRepository.findById(id);
-        if (creditProduct.isEmpty()) {
-            throw new CreditProductNotFoundException(id);
-        }
+        creditProductRepository.findById(id).
+                orElseThrow(() -> new CreditProductNotFoundException(id));
 
         creditProductService.update(creditProductDTO,id);
         return new ResponseEntity<>("Условия обновлены", HttpStatus.CREATED);
-    }
-
-
-
-    @Autowired
-    public void setCreditProductRepository(CreditProductRepository creditProductRepository){
-        this.creditProductRepository = creditProductRepository;
     }
 }

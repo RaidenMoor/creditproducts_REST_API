@@ -1,3 +1,9 @@
+# Исключить файлы конфигурации с секретами
+application.properties
+
+# Исключить лог-файлы
+*.log
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
